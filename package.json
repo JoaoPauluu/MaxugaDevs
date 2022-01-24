@@ -9,14 +9,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@discordjs/opus": "^0.5.3",
-    "@discordjs/voice": "^0.7.2",
+    "@discordjs/opus": "^0.7.0",
+    "@discordjs/voice": "^0.7.5",
     "canvacord": "^5.2.3",
-    "discord.js": "^13.1.0",
-    "ffmpeg-static": "^4.4.0",
+    "discord.js": "^13.6.0",
+    "ffmpeg-static": "^4.4.1",
     "libsodium-wrappers": "^0.7.9",
-    "node-fetch": "^3.0.0",
-    "yt-search": "^2.10.2",
-    "ytdl-core": "^4.9.2"
+    "node-fetch": "^3.2.0",
+    "yt-search": "^2.10.3",
+    "ytdl-core": "^4.10.0"
   }
 }
