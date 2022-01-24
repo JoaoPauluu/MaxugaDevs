@@ -16,6 +16,11 @@ function checkIfUrl(_string) {
 
 
 async function command(message, args) {
+    if (args.length == 0) {
+        message.reply(simpleEmbed('You need to type a Youtube URL or a search querry'));
+        return;
+    }
+
     const guildId = message.guild.id;
     if(checkIfUrl(args[0])) {
         // Runs if user typed an url
@@ -28,14 +33,18 @@ async function command(message, args) {
         }
     }
     // Searches for what the user has typed
-    const querry = args.join(' ');
-    const result = await yts(querry);
-    const url = result.videos[0].url
-    Player.playSong(message, guildId, url);
-    //console.log(result);
-
-    return;
-
+    try {
+        const querry = args.join(' ');
+        const result = await yts(querry);
+        const url = result.videos[0].url
+        Player.playSong(message, guildId, url);
+        //console.log(result);
+    
+        return;
+    } catch (err) {
+        console.log(err);
+        message.reply(err.message);
+    }
 
 }
 

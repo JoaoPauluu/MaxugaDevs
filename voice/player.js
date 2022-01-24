@@ -40,7 +40,7 @@ async function playSong(message, guildId, url) {
                 return;
             }
             if(!hasQueue) {
-                // Plays given song (creates a pleyer, connection and queue,
+                // Plays given song (creates a player, connection and queue,
                 // Adds song to the first position on that queue and recalls this function without an url)
                 console.log('Running doest have queue');
                 const player = Voice.createAudioPlayer();
