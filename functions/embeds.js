@@ -70,11 +70,28 @@ function queueEmbed(songs) {
     }
 }
 
+async function searchEmbed(data) {
+    let description = '';
+    let counter = 1;
+    data.forEach(video => {
+        description += `[ ${counter} ] **${video.title}** - ${video.timestamp}\n`
+        counter++;
+    });
+    
+
+    return {
+        title: '**Querry**',
+        color: mainColor,
+        description: description
+    }
+}
+
 
 module.exports = {
     helpEmbed,
     simpleEmbed,
     titleEmbed,
-    queueEmbed
+    queueEmbed,
+    searchEmbed
 }
   

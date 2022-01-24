@@ -1,6 +1,6 @@
 // Prefix and token of the bot
-const prefix = '##';
-const token = 'ODg4OTM4NDYxNjY1NTY2NzQy.YUZ-dA.CzMPo4dCujZThwiIOOrjYOvN3dE';
+const prefix = '#';
+const token = process.env.BOT_TOKEN;
 
 // Importing dependencies
 const { Client, Intents, ClientVoiceManager } = require('discord.js');
@@ -13,7 +13,7 @@ const { loadCommands } = require('./functions/loadCommands');
 const CommandsMap = loadCommands();
 
 // Creating the client object with right intents
-const client = new Client({ intents: [Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_VOICE_STATES] });
+const client = new Client({ intents: [Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_VOICE_STATES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS] });
 
 
 

@@ -1,5 +1,6 @@
 const Voice = require('@discordjs/voice');
 const ytdl = require('ytdl-core');
+const yts = require('yt-search');
 
 const queues = new Map();
 
@@ -72,6 +73,14 @@ async function deleteSong(guildId, number) {
     return false;
 }
 
+async function topVideos(querry) {
+    let result = await yts.search(querry);
+    result = result.videos;
+    result = result.slice(0, 6);
+    console.log(result);
+    return result;
+}
+
 module.exports = {
     hasQueue,
     getQueue,
@@ -82,5 +91,6 @@ module.exports = {
     playing,
     getCurrentSong,
     deleteCurrentSong,
-    deleteSong
+    deleteSong,
+    topVideos
 }
