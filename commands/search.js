@@ -10,8 +10,10 @@ async function clearMessagesAndPlaySong(collector, message, botMessage, song) {
     collector.stop();
     const songTitle = song.title;
     const songUrl = song.url;
-    botMessage.delete();
     Player.playSong(message, message.guild.id, songUrl);
+    setTimeout(() => {
+        botMessage.delete();
+    }, 5000);
 }
 
 
@@ -33,6 +35,7 @@ async function command(message, args) {
         let counter = 0;
         result.forEach(async function(video) {
             try {
+                if (!botMessage) return;
                 botMessage.react(emojis[counter]);
                 counter++;
             } catch {console.log('Cannot react to message, it was probably already deleted')};
