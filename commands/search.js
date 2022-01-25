@@ -32,8 +32,10 @@ async function command(message, args) {
         // Reacts the message with the options
         let counter = 0;
         result.forEach(async function(video) {
-            botMessage.react(emojis[counter]);
-            counter++;
+            try {
+                botMessage.react(emojis[counter]);
+                counter++;
+            } catch {console.log('Cannot react to message, it was probably already deleted')};
         })
         
         // Checks if the user reacts and plays the song
