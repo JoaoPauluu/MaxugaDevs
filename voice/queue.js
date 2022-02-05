@@ -1,5 +1,6 @@
 const Voice = require('@discordjs/voice');
-const ytdl = require('ytdl-core');
+//const ytdl = require('ytdl-core');
+const pldl = require('play-dl');
 const yts = require('yt-search');
 
 const queues = new Map();
@@ -43,10 +44,17 @@ async function deleteQueue(guildId) {
 async function extractInfo(url) {
     // Extracts youtube video info from a url
     try {
+        /*
         const info = await ytdl.getInfo(url)
         return {
             title: info.videoDetails.title,
             url: info.videoDetails.video_url
+        }
+        */
+        const info = await pldl.video_basic_info(url);
+        return {
+            title: info.video_details.title,
+            url: info.video_details.url
         }
     } catch (err) {
         console.log(err);

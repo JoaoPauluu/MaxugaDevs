@@ -1,6 +1,7 @@
 const Voice = require('@discordjs/voice');
 //const { getURLVideoID } = require('ytdl-core');
-const ytdl = require('ytdl-core');
+//const ytdl = require('ytdl-core');
+const pldl = require('play-dl');
 const Queue = require('./queue');
 const Embeds = require('../functions/embeds');
 
@@ -22,8 +23,10 @@ async function playSong(message, guildId, url) {
                 // Plays first song from the queue
                 console.log('Running has song in queue');
                 const songUrl = queue.songs[0].url;
-                const stream = ytdl(songUrl, { filter: 'audioonly' });
-                const resource = Voice.createAudioResource(stream);
+                const stream = await pldl.stream(songUrl, { discordPlayerCompatibility: true });
+                const resource = Voice.createAudioResource(stream.stream, {
+                    inputType: stream.type
+                });
                 const player = queue.player;
                 player.play(resource);
                 return;

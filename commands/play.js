@@ -1,5 +1,5 @@
 const Voice = require('@discordjs/voice');
-const ytdl = require('ytdl-core');
+//const ytdl = require('ytdl-core');
 const yts = require('yt-search');
 const Queue = require('../voice/queue');
 const Player = require('../voice/player');
