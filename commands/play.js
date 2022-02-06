@@ -41,9 +41,9 @@ async function command(message, args) {
         //console.log(result);
     
         return;
-    } catch (err) {
-        console.log(err);
-        message.reply(err.message);
+    } catch (e) {
+        console.log(e);
+        message.reply(e.message);
     }
 
 }
