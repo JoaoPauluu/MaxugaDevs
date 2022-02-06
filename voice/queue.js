@@ -3,6 +3,10 @@ const Voice = require('@discordjs/voice');
 const pldl = require('play-dl');
 const yts = require('yt-search');
 
+pldl.setToken({
+    useragent: [process.env.USER_AGENT]
+});
+
 const queues = new Map();
 
 async function hasQueue(guildId){

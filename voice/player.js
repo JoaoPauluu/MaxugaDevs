@@ -5,6 +5,10 @@ const pldl = require('play-dl');
 const Queue = require('./queue');
 const Embeds = require('../functions/embeds');
 
+pldl.setToken({
+    useragent: [process.env.USER_AGENT]
+});
+
 async function playSong(message, guildId, url) {
     try {
         const hasQueue = await Queue.hasQueue(guildId);
