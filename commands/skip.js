@@ -4,13 +4,12 @@ const Queue = require('../voice/queue');
 const Embeds = require('../functions/embeds');
 
 
-async function command(message, args) {
+async function command(message) {
     try {
         const guildId = message.guild.id;
-        const hasQueue = Queue.hasQueue(guildId);
-        if(!hasQueue) message.reply(Embeds.simpleEmbed("**I'm not currently playing anything**"));
-
         const queue = await Queue.getQueue(guildId);
+        if(queue == null) message.reply(Embeds.simpleEmbed("**I'm not currently playing anything**"));
+
         message.reply(Embeds.simpleEmbed(`Skipping **${queue.songs[0].title}**`));
         await queue.player.stop();
     } catch(e) {

@@ -4,13 +4,12 @@ const Embeds = require('../functions/embeds');
 async function command(message, args) {
     try {
         const guildId = message.guild.id;
-        const hasQueue = await Queue.hasQueue(guildId);
-        if(!hasQueue) {
+        const queue = await Queue.getQueue(guildId);
+        if(queue == null) {
             message.reply(Embeds.simpleEmbed('**Currently not playing any song**'));
             return;
         }
     
-        const queue = await Queue.getQueue(guildId);
         const songs = queue.songs;
     
         const queueEmbed = Embeds.queueEmbed(songs);

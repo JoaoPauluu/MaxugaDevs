@@ -76,11 +76,11 @@ async function topVideos(querry) {
 }
 
 async function newQueue(message) {
-    logger('newQueue', guildId);
-    
-    const guildId = message.guild.id;
+    const guildId = message.guildId;
 
-    if (queues.has(guildId)) return;
+    logger('newQueue', guildId);
+
+    if (queues.has(guildId)) return queues.get(guildId);
     
     // Creaters a player and a connection for that queue
     const player = Voice.createAudioPlayer();
@@ -90,12 +90,15 @@ async function newQueue(message) {
         adapterCreator: message.guild.voiceAdapterCreator
     })
 
+    await connection.subscribe(player);
+
     queues.set(guildId, {
         guildId: guildId,
         songs: [],
         connection: connection,
         player: player,
         playing: false,
+        timeout: null,
         volume: 5,
 
         get currentSong() {
@@ -128,6 +131,7 @@ async function newQueue(message) {
 
     });
 
+    return queues.get(guildId);
 }
 
 

@@ -10,7 +10,7 @@ async function clearMessagesAndPlaySong(collector, message, botMessage, song) {
     collector.stop();
     const songTitle = song.title;
     const songUrl = song.url;
-    Player.playSong(message, message.guild.id, songUrl);
+    Player.handleSong(message, songUrl);
     setTimeout(() => {
         botMessage.delete();
     }, 5000);

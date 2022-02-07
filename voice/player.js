@@ -1,85 +1,123 @@
 const Voice = require('@discordjs/voice');
-//const { getURLVideoID } = require('ytdl-core');
-//const ytdl = require('ytdl-core');
 const pldl = require('play-dl');
 const Queue = require('./queue');
-const Embeds = require('../functions/embeds');
+const { simpleEmbed } = require('../functions/embeds');
 
 pldl.setToken({
     useragent: [process.env.USER_AGENT]
 });
 
-async function playSong(message, guildId, url) {
-    try {
-        const hasQueue = await Queue.hasQueue(guildId);
+function logger(functionName, guildId) {
+    console.log(`Exec: ${functionName} at: ${guildId}`);
+    return;
+}
 
-        if(!url) {
-            console.log('Running doesnt have url');
-            const queue = await Queue.getQueue(guildId);
+async function configurePlayerAndConnection(guildId) {
+    logger('configurePlayerAndConnection', guildId);
+
+    const queue = await Queue.getQueue(guildId);
+    const connection = queue.connection;
+    const player = queue.player;
+
+    player.on('stateChange', async (oldState, newState) => {
+        if(oldState.status == Voice.AudioPlayerStatus.Playing && newState.status == Voice.AudioPlayerStatus.Idle) {
+            // Runs when a song finishes
+            console.log(`Connection at ${guildId} changed to: Idle`);
+            queue.deleteCurrentSong();
+
             if(queue.songs.length == 0) {
-                // Destroys the player and queue
-                console.log('Running no songs in queue');
-                queue.connection.destroy();
-                Queue.deleteQueue(guildId);
+                // Runs when there are no more songs on the queue
+                logger(`No more songs in queue at: ${guildId}`);
+                queue.playing = false;
+                queue.timeout = setTimeout(() => {
+                    logger(`Deleting queue due to Timeout at: ${guildId}`);
+                    Queue.deleteQueue(guildId);
+                }, 240000)
+                return;
+            } else {
+                // If there are songs in the queue, this function will be ran
+                playSong(guildId);
                 return;
             }
-            if(queue.songs.length > 0) {
-                // Plays first song from the queue
-                console.log('Running has song in queue');
-                const songUrl = queue.songs[0].url;
-                const stream = await pldl.stream(songUrl, { discordPlayerCompatibility: true });
-                const resource = Voice.createAudioResource(stream.stream, {
-                    inputType: stream.type
-                });
-                const player = queue.player;
-                player.play(resource);
-                return;
-            }
+
         }
-        if(url) {
-            console.log('Running has url');
-            const songInfo = await Queue.extractInfo(url);
-            if(hasQueue) {
-                // Adds song to the end of the queue
-                console.log('Running has queue');
-                await Queue.addSongToQueue(guildId, songInfo);
-                message.reply(Embeds.simpleEmbed(`**${songInfo.title}** added to the Queue!`));
-                return;
-            }
-            if(!hasQueue) {
-                // Plays given song (creates a player, connection and queue,
-                // Adds song to the first position on that queue and recalls this function without an url)
-                console.log('Running doest have queue');
-                const player = Voice.createAudioPlayer();
-                const connection = Voice.joinVoiceChannel({
-                    channelId: message.member.voice.channel.id,
-                    guildId: message.guild.id,
-                    adapterCreator: message.guild.voiceAdapterCreator
-                })
+    }) 
+}
 
-                connection.subscribe(player);
-                await Queue.newQueue(guildId, message, connection, player);
-                await Queue.addSongToQueue(guildId, songInfo);
+async function playSong(guildId) {
+    // Starts playing the first song on a queue
+    logger('playSong', guildId);
 
-                player.on('stateChange', async (oldState, newState) => {
-                    if(oldState.status == Voice.AudioPlayerStatus.Playing && newState.status === Voice.AudioPlayerStatus.Idle) {
-                        // Runs every time the player finishes a song
-                        console.log('===State chaning to idle===');
-                        Queue.deleteCurrentSong(guildId);
-                        playSong(message, guildId);
-                    }
-                })
-                message.reply(Embeds.simpleEmbed(`Playing **${songInfo.title}**`));
-                playSong(message, guildId);
-            }
-        }
+    const queue = await Queue.getQueue(guildId);
 
-    } catch(e) {
-        message.reply(e.message);
+    if(!queue.playing) {
+        // Checks if the bot was playing something before. If not, cancels the 
+        // disconnect timeout and sets playing to true.
+        logger('playSong (queue was not playing)', guildId);
+        queue.playing = true;
+        clearTimeout(queue.timeout);
+    }
+    console.log(queue);
+    const url = queue.songs[0].url;
+
+    try {
+        console.log('========== ATTACHING PLAYER ===============');
+        const stream = await pldl.stream(url, {discordPlayerCompatibility: true});
+        const resource = await Voice.createAudioResource(stream.stream, {
+            inputType: stream.type
+        })
+        await queue.player.play(resource);
+    } catch (e) {
         console.log(e);
+        return;
     }
 }
 
+
+async function handleSong(message, url) {
+    logger('handleSong', url);
+
+    const guildId = message.guild.id;
+    let queue = await Queue.getQueue(guildId);
+    let songInfo;
+    try {
+        songInfo = await Queue.extractInfo(url);
+    } catch (e) {
+        console.log(e);
+        return;
+    }
+
+    if(queue == null) {
+        //Runs if there's no queue
+        logger('handleSong (No queue)', url);
+
+        queue = await Queue.newQueue(message);
+        queue.addSongToQueue(songInfo);
+        playSong(guildId);
+        message.reply(simpleEmbed(`Now playing **${songInfo.title}!**`));
+        await configurePlayerAndConnection(guildId);
+        return;
+    } 
+    if(queue) {
+        if(!queue.playing) {
+            logger('handleSong (Has queue | Not playing)', url);
+            queue.addSongToQueue(songInfo);
+            playSong(guildId);
+            message.reply(simpleEmbed(`Now playing **${songInfo.title}!**`));
+            return;
+        }
+        if(queue.playing) {
+            logger('handleSong (Has queue | Playing)', url);
+            queue.addSongToQueue(songInfo);
+            message.reply(simpleEmbed(`**${songInfo.title}** added to the queue!`));
+            return;
+        }
+    }
+}
+
+
+
+
 module.exports = {
-    playSong
+    handleSong
 }

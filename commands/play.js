@@ -26,7 +26,7 @@ async function command(message, args) {
         // Runs if user typed an url
         try {
             const url = args[0];
-            Player.playSong(message, guildId, url);
+            Player.handleSong(message, url);
             return;
         } catch {
             message.reply(simpleEmbed('Something wrong happened. Did you type a Youtube URL?'));
@@ -37,7 +37,7 @@ async function command(message, args) {
         const querry = args.join(' ');
         const result = await yts(querry);
         const url = result.videos[0].url
-        Player.playSong(message, guildId, url);
+        Player.handleSong(message, url);
         //console.log(result);
     
         return;

@@ -1,4 +1,5 @@
 const Queue = require('../voice/queue');
+const { simpleEmbed } = require('../functions/embeds');
 
 
 async function command(message) {
@@ -6,8 +7,8 @@ async function command(message) {
         const guildId = message.guild.id;
         const queue = await Queue.getQueue(guildId);
         const currentSong = queue.songs[0]
-        message.reply(currentSong.title);
-    } catch (e) {
+        message.reply(simpleEmbed(currentSong.title));
+    } catch (e) {   
         message.reply(e.message);
         console.log(e);
     }
