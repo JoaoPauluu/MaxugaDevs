@@ -8,8 +8,10 @@ async function command(message) {
     try {
         const guildId = message.guild.id;
         const queue = await Queue.getQueue(guildId);
-        if(queue == null) message.reply(Embeds.simpleEmbed("**I'm not currently playing anything**"));
-
+        if(queue == null) {
+            message.reply(Embeds.simpleEmbed("**I'm not currently playing anything**"));
+            return;
+        }
         message.reply(Embeds.simpleEmbed(`Skipping **${queue.songs[0].title}**`));
         await queue.player.stop();
     } catch(e) {

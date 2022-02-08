@@ -5,7 +5,7 @@ async function command(message, args) {
     const guildId = message.guildId;
     const queue = await Queue.getQueue(guildId);
 
-    if(queue = null) {
+    if(queue == null) {
         message.reply(simpleEmbed("I'm not currently playing anything!"));
         return;
     }

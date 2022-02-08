@@ -9,6 +9,10 @@ async function command(message, args) {
             message.reply(Embeds.simpleEmbed('**Currently not playing any song**'));
             return;
         }
+        if(queue.playing == false) {
+            message.reply(Embeds.simpleEmbed('**Currently not playing any song. If you want me to disconnect type #stop**'));
+            return;
+        }
     
         const songs = queue.songs;
     

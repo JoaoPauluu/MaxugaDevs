@@ -1,5 +1,4 @@
 const Discord = require('discord.js');
-const { description } = require('../commands/nowplaying');
 const mainColor = '#ff8400'
 
 
