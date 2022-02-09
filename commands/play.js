@@ -16,8 +16,18 @@ function checkIfUrl(_string) {
 
 
 async function command(message, args) {
-    if (args.length == 0) {
+    // Check if the conditions match so that the commannd can run
+    const queue = await Queue.getQueue(message.guild.id);
+    if(args.length == 0) {
         message.reply(simpleEmbed('You need to type a Youtube URL or a search querry'));
+        return;
+    }
+    if(!message.member.voice.channel) {
+        message.reply(simpleEmbed('**You need to be in a voice channel to run this command**'));
+        return;
+    }
+    if(queue != null && message.member.voice.channel.id != queue.voiceChannelId) {
+        message.reply(simpleEmbed(`**You need to join <#${queue.voiceChannelId}> to run this command**`));
         return;
     }
 

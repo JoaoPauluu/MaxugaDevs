@@ -7,6 +7,11 @@ async function command(message) {
     try {
         const guildId = message.guild.id;
         const queue = await Queue.getQueue(guildId);
+
+        if(!queue.playing || queue == null) {
+            message.reply("**Currently not playing anything**");
+        }
+
         const currentSong = queue.songs[0]
         message.reply(simpleEmbed(currentSong.title));
     } catch (e) {   

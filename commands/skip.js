@@ -1,5 +1,4 @@
 const Voice = require('@discordjs/voice');
-const ytdl = require('ytdl-core');
 const Queue = require('../voice/queue');
 const Embeds = require('../functions/embeds');
 
@@ -10,6 +9,10 @@ async function command(message) {
         const queue = await Queue.getQueue(guildId);
         if(queue == null) {
             message.reply(Embeds.simpleEmbed("**I'm not currently playing anything**"));
+            return;
+        }
+        if(!queue.playing) {
+            message.reply(Embeds.simpleEmbed("**I'm not currently playing anything. Type #stop for me to leave the call**"));
             return;
         }
         message.reply(Embeds.simpleEmbed(`Skipping **${queue.songs[0].title}**`));

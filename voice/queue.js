@@ -94,6 +94,8 @@ async function newQueue(message) {
 
     queues.set(guildId, {
         guildId: guildId,
+        voiceChannelId: await message.member.voice.channel.id,
+        invokerChannelId: await message.channelId,
         songs: [],
         connection: connection,
         player: player,
@@ -116,7 +118,7 @@ async function newQueue(message) {
         async deleteSong(number) {
             logger('deleteSong', this.guildId);
 
-            if(queue.songs.length > number) {
+            if (queue.songs.length > number) {
                 // Deletes a song and returns it
                 return queue.songs.splice(number, 1)[0];
             }
@@ -128,7 +130,6 @@ async function newQueue(message) {
 
             this.songs.shift();
         },
-
     });
 
     return queues.get(guildId);
