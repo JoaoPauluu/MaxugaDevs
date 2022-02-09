@@ -60,7 +60,7 @@ async function command(message, args) {
 
 module.exports = {
     name: 'play',
-    description: '',
+    description: 'Plays a song\nUsage: #play <querry/url>',
     perms: '',
     execute: command
 }

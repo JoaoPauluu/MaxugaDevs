@@ -12,7 +12,7 @@ async function command(message, args) {
 
 module.exports = {
     name: 'resume',
-    description: '',
+    description: 'Resumes the curret song',
     perms: '',
     execute: command
 }

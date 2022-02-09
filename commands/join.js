@@ -8,7 +8,7 @@ function command() {
 
 module.exports = {
     name: 'join',
-    description: '',
+    description: 'Join a voice channel **(Not working just yet)**',
     perms: '',
     execute: command
 }

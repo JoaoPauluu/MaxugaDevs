@@ -23,7 +23,7 @@ async function command(message) {
 
 module.exports = {
     name: 'nowplaying',
-    description: '',
+    description: 'Shows the song that the bot is playing',
     perms: '',
     execute: command
 }

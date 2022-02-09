@@ -25,7 +25,7 @@ async function command(message) {
 
 module.exports = {
     name: 'skip',
-    description: '',
+    description: 'Skips the current song',
     perms: '',
     execute: command
 }

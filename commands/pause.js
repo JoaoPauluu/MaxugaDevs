@@ -12,7 +12,7 @@ async function command(message, args) {
 
 module.exports = {
     name: 'pause',
-    description: '',
+    description: 'Pauses current song',
     perms: '',
     execute: command
 }

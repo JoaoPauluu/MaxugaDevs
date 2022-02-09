@@ -6,7 +6,7 @@ function command(message) {
 
 module.exports = {
     name: 'help',
-    description: '',
+    description: 'Shows this',
     perms: '',
     execute: command
 }

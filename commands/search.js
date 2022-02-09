@@ -74,7 +74,7 @@ async function command(message, args) {
 
 module.exports = {
     name: 'search',
-    description: '',
+    description: 'Searches for a song\nUsage: #search <querry>',
     perms: '',
     execute: command
 }
