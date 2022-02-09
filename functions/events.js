@@ -24,11 +24,11 @@ async function clientReady(client) {
     console.log('Ready!');
 
     // Sets the bot status
-    await client.user.setActivity('Simplesmente Maxuga Gay', {
+    await client.user.setActivity('#help', {
         status: 'online',
         activity: {
-            name: 'prefix: maxdev',
-            type: 'playing'
+            name: 'activity',
+            type: 'listening'
         }
     })
 }
