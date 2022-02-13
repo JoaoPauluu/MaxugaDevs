@@ -27,10 +27,10 @@ async function configurePlayerAndConnection(guildId) {
 
             if(queue.songs.length == 0) {
                 // Runs when there are no more songs on the queue
-                logger(`No more songs in queue at: ${guildId}`);
+                logger(`No more songs in queue`, guildId);
                 queue.playing = false;
                 queue.timeout = setTimeout(() => {
-                    logger(`Deleting queue due to Timeout at: ${guildId}`);
+                    logger(`Deleting queue due to Timeout`, guildId);
                     queue.sendMessageToInvokerChannel(simpleEmbed(`**The player has been idle for too long. Disconnecting from the channel <#${queue.voiceChannelId}>**`));
                     Queue.deleteQueue(guildId);
                 }, 240000)

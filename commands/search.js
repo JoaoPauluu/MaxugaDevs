@@ -65,9 +65,9 @@ async function command(message, args) {
                 }
             }
         })
-    } catch (err) {
-        console.log(err);
-        message.reply(err.message);
+    } catch (e) {
+        console.log(e);
+        message.reply(e.message);
     }
 
 }

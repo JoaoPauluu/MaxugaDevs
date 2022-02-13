@@ -66,7 +66,7 @@ async function topVideos(querry) {
         let result = await yts.search(querry);
         result = result.videos;
         result = result.slice(0, 6);
-        console.log(result);
+        //console.log(result);
         return result;
     } catch (e) {
         console.log(e);
