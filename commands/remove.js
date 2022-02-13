@@ -10,14 +10,15 @@ async function command(message, args) {
 
         const number = parseInt(args[0]);
         const guildId = message.guild.id;
-        const hasQueue = Queue.hasQueue(guildId);
+        const queue = await Queue.getQueue(guildId);
 
         if(number == NaN) {
             message.reply(simpleEmbed('**Invaid Function Argument, please use a number**'));
+            return;
         }
 
-        if(!hasQueue) {
-            message.reply('**Not playing anything at the moment, try using *play***');
+        if(queue == null) {
+            message.reply(simpleEmbed('**Not playing anything at the moment, try using *play***'));
             return;
         }
 
@@ -30,7 +31,7 @@ async function command(message, args) {
             return;
         }
 
-        const song = await Queue.deleteSong(guildId, number);
+        const song = await queue.deleteSong(number);
 
         if(!song) {
             message.reply(simpleEmbed("**This song doesn't exit!**"));

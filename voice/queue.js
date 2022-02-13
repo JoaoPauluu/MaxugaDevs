@@ -122,9 +122,9 @@ async function newQueue(message) {
         async deleteSong(number) {
             logger('deleteSong', this.guildId);
 
-            if (queue.songs.length > number) {
+            if (this.songs.length > number) {
                 // Deletes a song and returns it
-                return queue.songs.splice(number, 1)[0];
+                return this.songs.splice(number, 1)[0];
             }
             return false;
         },
