@@ -31,12 +31,14 @@ async function configurePlayerAndConnection(guildId) {
                 queue.playing = false;
                 queue.timeout = setTimeout(() => {
                     logger(`Deleting queue due to Timeout at: ${guildId}`);
+                    queue.sendMessageToInvokerChannel(simpleEmbed(`**The player has been idle for too long. Disconnecting from the channel <#${queue.voiceChannelId}>**`));
                     Queue.deleteQueue(guildId);
                 }, 240000)
                 return;
             } else {
-                // If there are songs in the queue, this function will be ran
+                // If there are songs in the queue, this block will be ran
                 playSong(guildId);
+                queue.sendMessageToInvokerChannel(simpleEmbed(`Playing next from the queue: **${queue.songs[0].title}**`));
                 return;
             }
 
@@ -60,7 +62,7 @@ async function playSong(guildId) {
     const url = queue.songs[0].url;
 
     try {
-        console.log('========== ATTACHING PLAYER ===============');
+        console.log('========== ATTACHING PLAYER ==========');
         const stream = await pldl.stream(url, {discordPlayerCompatibility: true});
         const resource = Voice.createAudioResource(stream.stream, {
             inputType: stream.type
@@ -68,6 +70,7 @@ async function playSong(guildId) {
         await queue.player.play(resource);
     } catch (e) {
         console.log(e);
+        queue.sendMessageToInvokerChannel(simpleEmbed(`Something went wrong while trying to play **${queue.songs[0].title}**... Skipping to the next song`));
         queue.deleteCurrentSong();
         return;
     }

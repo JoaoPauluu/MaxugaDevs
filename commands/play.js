@@ -3,7 +3,7 @@ const Voice = require('@discordjs/voice');
 const yts = require('yt-search');
 const Queue = require('../voice/queue');
 const Player = require('../voice/player');
-const { simpleEmbed, searchEmbed } = require('../functions/embeds');
+const { simpleEmbed } = require('../functions/embeds');
 
 function checkIfUrl(_string) {
     // Returs true or false if the string is a url
@@ -47,7 +47,7 @@ async function command(message, args) {
         const querry = args.join(' ');
         const result = await yts(querry);
         const url = result.videos[0].url
-        await Player.handleSong(message, url);
+        Player.handleSong(message, url);
         //console.log(result);
     
         return;

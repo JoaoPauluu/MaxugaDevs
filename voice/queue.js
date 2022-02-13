@@ -1,6 +1,7 @@
 const Voice = require('@discordjs/voice');
 const pldl = require('play-dl');
 const yts = require('yt-search');
+const { client } = require('../client');
 
 pldl.setToken({
     useragent: [process.env.USER_AGENT]
@@ -113,8 +114,9 @@ async function newQueue(message) {
             this.songs.push(songInfo);
         },
 
-        async sendMessageToInvokerChannel(message) {
-
+        async sendMessageToInvokerChannel(messageContent) {
+            const channel = client.channels.cache.get(this.invokerChannelId);
+            channel.send(messageContent);
         },
 
         async deleteSong(number) {
