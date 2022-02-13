@@ -57,18 +57,18 @@ async function playSong(guildId) {
         queue.playing = true;
         clearTimeout(queue.timeout);
     }
-    console.log(queue);
     const url = queue.songs[0].url;
 
     try {
         console.log('========== ATTACHING PLAYER ===============');
         const stream = await pldl.stream(url, {discordPlayerCompatibility: true});
-        const resource = await Voice.createAudioResource(stream.stream, {
+        const resource = Voice.createAudioResource(stream.stream, {
             inputType: stream.type
         })
         await queue.player.play(resource);
     } catch (e) {
         console.log(e);
+        queue.deleteCurrentSong();
         return;
     }
 }
@@ -84,6 +84,7 @@ async function handleSong(message, url) {
         songInfo = await Queue.extractInfo(url);
     } catch (e) {
         console.log(e);
+        message.reply(e.message);
         return;
     }
 
@@ -92,10 +93,10 @@ async function handleSong(message, url) {
         logger('handleSong (No queue)', url);
 
         queue = await Queue.newQueue(message);
-        queue.addSongToQueue(songInfo);
-        playSong(guildId);
-        message.reply(simpleEmbed(`Now playing **${songInfo.title}!**`));
         await configurePlayerAndConnection(guildId);
+        await queue.addSongToQueue(songInfo);
+        await playSong(guildId);
+        message.reply(simpleEmbed(`Now playing **${songInfo.title}!**`));
         return;
     } 
     if(queue) {

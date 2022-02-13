@@ -1,5 +1,4 @@
 const Voice = require('@discordjs/voice');
-//const ytdl = require('ytdl-core');
 const pldl = require('play-dl');
 const yts = require('yt-search');
 
@@ -38,8 +37,7 @@ async function extractInfo(url) {
             url: info.video_details.url
         }
     } catch (e) {
-        console.log(e);
-        throw new Error("Something went wrong while extracting video info");
+        throw(e);
     }
 }
 
@@ -113,6 +111,10 @@ async function newQueue(message) {
             logger('addSongToQueue', this.guildId);
 
             this.songs.push(songInfo);
+        },
+
+        async sendMessageToInvokerChannel(message) {
+
         },
 
         async deleteSong(number) {

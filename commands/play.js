@@ -47,7 +47,7 @@ async function command(message, args) {
         const querry = args.join(' ');
         const result = await yts(querry);
         const url = result.videos[0].url
-        Player.handleSong(message, url);
+        await Player.handleSong(message, url);
         //console.log(result);
     
         return;
