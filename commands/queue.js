@@ -30,6 +30,7 @@ async function command(message, args) {
 module.exports = {
     name: 'queue',
     description: 'Shows the current queue on this guild',
+    alias: [],
     perms: '',
     execute: command
 }

@@ -50,6 +50,7 @@ async function command(message, args) {
 module.exports = {
     name: 'remove',
     description: 'Removes a given song from the queue\nUsage: #remove <number>',
+    alias: [],
     perms: '',
     execute: command
 }

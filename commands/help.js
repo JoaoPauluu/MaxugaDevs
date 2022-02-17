@@ -42,6 +42,7 @@ function command(message) {
 module.exports = {
     name: 'help',
     description: 'Shows this',
+    alias: [],
     perms: '',
     execute: command
 }

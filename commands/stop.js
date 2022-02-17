@@ -22,6 +22,7 @@ async function command(message, args) {
 module.exports = {
     name: 'stop',
     description: 'Stops the player, clears the queue and leaves the call',
+    alias: [],
     perms: '',
     execute: command
 }

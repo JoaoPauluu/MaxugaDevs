@@ -61,6 +61,7 @@ async function command(message, args) {
 module.exports = {
     name: 'play',
     description: 'Plays a song\nUsage: #play <querry/url>',
+    alias: [],
     perms: '',
     execute: command
 }

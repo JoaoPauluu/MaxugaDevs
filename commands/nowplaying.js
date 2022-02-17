@@ -24,6 +24,7 @@ async function command(message) {
 module.exports = {
     name: 'nowplaying',
     description: 'Shows the song that the bot is playing',
+    alias: [],
     perms: '',
     execute: command
 }

@@ -13,6 +13,7 @@ async function command(message, args) {
 module.exports = {
     name: 'pause',
     description: 'Pauses current song',
+    alias: [],
     perms: '',
     execute: command
 }

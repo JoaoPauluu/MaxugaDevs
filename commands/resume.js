@@ -13,6 +13,7 @@ async function command(message, args) {
 module.exports = {
     name: 'resume',
     description: 'Resumes the curret song',
+    alias: [],
     perms: '',
     execute: command
 }
