@@ -29,18 +29,15 @@ async function configurePlayerAndConnection(guildId) {
                 // Runs when there are no more songs on the queue
                 logger(`No more songs in queue`, guildId);
                 queue.playing = false;
-                queue.timeout = setTimeout(() => {
+                queue.timeout = setTimeout(async () => {
                     logger(`Timeout reached`, guildId);
-                    //queue.sendMessageToInvokerChannel(simpleEmbed(`**The player has been idle for too long. Disconnecting from the channel <#${queue.voiceChannelId}>**`));
-                    //Queue.deleteQueue(guildId);
                     await queue.connection.disconnect();
                     return;
-                }, 5000)
+                }, 600000)
                 return;
             } else {
-                // If there are songs in the queue, this block will be   ran
+                // If there are songs in the queue, this block will be ran
                 playSong(guildId);
-                //queue.sendMessageToInvokerChannel(simpleEmbed(`Playing next from the queue: **${queue.songs[0].title}**`));
                 return;
             }
 
