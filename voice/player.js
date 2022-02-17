@@ -30,20 +30,33 @@ async function configurePlayerAndConnection(guildId) {
                 logger(`No more songs in queue`, guildId);
                 queue.playing = false;
                 queue.timeout = setTimeout(() => {
-                    logger(`Deleting queue due to Timeout`, guildId);
-                    queue.sendMessageToInvokerChannel(simpleEmbed(`**The player has been idle for too long. Disconnecting from the channel <#${queue.voiceChannelId}>**`));
-                    Queue.deleteQueue(guildId);
-                }, 240000)
+                    logger(`Timeout reached`, guildId);
+                    //queue.sendMessageToInvokerChannel(simpleEmbed(`**The player has been idle for too long. Disconnecting from the channel <#${queue.voiceChannelId}>**`));
+                    //Queue.deleteQueue(guildId);
+                    await queue.connection.disconnect();
+                    return;
+                }, 5000)
                 return;
             } else {
-                // If there are songs in the queue, this block will be ran
+                // If there are songs in the queue, this block will be   ran
                 playSong(guildId);
-                queue.sendMessageToInvokerChannel(simpleEmbed(`Playing next from the queue: **${queue.songs[0].title}**`));
+                //queue.sendMessageToInvokerChannel(simpleEmbed(`Playing next from the queue: **${queue.songs[0].title}**`));
                 return;
             }
 
         }
     }) 
+    connection.on(Voice.VoiceConnectionStatus.Disconnected, async (oldState, newState) => {
+        logger('Disconnected from the channel', guildId);
+        try {
+            await queue.sendMessageToInvokerChannel(simpleEmbed(`**Disconnecting from the channel <#${queue.voiceChannelId}>**`));
+            await Queue.deleteQueue(guildId);
+            return;
+        } catch (e) {
+            console.log(e);
+            return;
+        }
+    })
 }
 
 async function playSong(guildId) {
@@ -60,14 +73,15 @@ async function playSong(guildId) {
         clearTimeout(queue.timeout);
     }
     const url = queue.songs[0].url;
+    const title = queue.songs[0].title;
 
     try {
-        console.log('========== ATTACHING PLAYER ==========');
         const stream = await pldl.stream(url, {discordPlayerCompatibility: true});
         const resource = Voice.createAudioResource(stream.stream, {
             inputType: stream.type
         })
         await queue.player.play(resource);
+        queue.sendMessageToInvokerChannel(simpleEmbed(`Now playing **${title}!**`));
     } catch (e) {
         console.log(e);
         queue.sendMessageToInvokerChannel(simpleEmbed(`Something went wrong while trying to play **${queue.songs[0].title}**... Skipping to the next song`));
@@ -99,7 +113,7 @@ async function handleSong(message, url) {
         await configurePlayerAndConnection(guildId);
         await queue.addSongToQueue(songInfo);
         await playSong(guildId);
-        message.reply(simpleEmbed(`Now playing **${songInfo.title}!**`));
+        //message.reply(simpleEmbed(`Now playing **${songInfo.title}!**`));
         return;
     } 
     if(queue) {
@@ -107,13 +121,13 @@ async function handleSong(message, url) {
             logger('handleSong (Has queue | Not playing)', url);
             queue.addSongToQueue(songInfo);
             playSong(guildId);
-            message.reply(simpleEmbed(`Now playing **${songInfo.title}!**`));
+            //message.reply(simpleEmbed(`Now playing **${songInfo.title}!**`));
             return;
         }
         if(queue.playing) {
             logger('handleSong (Has queue | Playing)', url);
             queue.addSongToQueue(songInfo);
-            message.reply(simpleEmbed(`**${songInfo.title}** added to the queue!`));
+            message.channel.send(simpleEmbed(`**${songInfo.title}** added to the queue!`));
             return;
         }
     }

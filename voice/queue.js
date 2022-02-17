@@ -48,8 +48,8 @@ async function deleteQueue(guildId) {
     const queue = queues.get(guildId);
 
     try {
-        queue.connection.disconnect();
-        queue.connection.destroy();
+        await queue.connection.disconnect();
+        await queue.connection.destroy();
     } catch (e) {
         console.log(e);
         throw new Error("Something went wrong when disconnecting from voice channel");
