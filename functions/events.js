@@ -8,9 +8,25 @@ async function messageCreated(message, CommandsMap, prefix) {
     args = message.content.slice(prefix.length).trim().split(/\s+/);
     command = args.shift();
 
-    // Returns if the command doesn't exist
+    // Runs if the command is not called by it's full name or doesn't exist
     if(!CommandsMap.has(command)) {
-        message.reply(simpleEmbed('Esse comando não existe', '#ff0000'));
+        // Iterate through the commands and check for aliases
+        let aliasFound = false;
+
+        CommandsMap.forEach(async (commandFunction, commandName) => {
+            for(const alias of commandFunction.alias) {
+                if(command == alias) {
+                    CommandsMap.get(commandName).execute(message, args);
+                    aliasFound = true;
+                    return;
+                }
+            }
+            return;
+        })
+
+        if(aliasFound) return;
+
+        message.reply(simpleEmbed("This command doesn't exist, type #help for a full list of commands", '#ff0000'));
         return;
     }
 
