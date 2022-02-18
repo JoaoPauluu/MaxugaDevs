@@ -22,7 +22,12 @@ const CommandsMap = loadCommands();
 // Creates a fields array for the embed description
 let fields = [];
 CommandsMap.forEach((command, name) => {
-    fields.push({ name: `**#${name}**`, value: command.description});
+    // Checks if a command has any aliases
+    if(command.alias.length == 0){
+        fields.push({ name: `**#${name}**`, value: `${command.description}`});
+    } else {
+        fields.push({ name: `**#${name}**`, value: `${command.description}\nAliases: **${command.alias.toString()}**`});
+    }
 })
 fields.push({ name: '**#help**', value: 'Shows this'});
 
