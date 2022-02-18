@@ -8,8 +8,9 @@ async function command(message) {
         const guildId = message.guild.id;
         const queue = await Queue.getQueue(guildId);
 
-        if(!queue.playing || queue == null) {
-            message.reply("**Currently not playing anything**");
+        if(queue == null || !queue.playing) {
+            message.reply(simpleEmbed("**Currently not playing anything**"));
+            return;
         }
 
         const currentSong = queue.songs[0]
