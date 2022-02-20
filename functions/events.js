@@ -1,5 +1,30 @@
 const { simpleEmbed } = require('./embeds');
 
+async function checkForPermsAndRunsCommand(CommandsMap, commandName, message, args) {
+    const command = CommandsMap.get(commandName);
+
+    // Iterate and run all the fuctions inside the perms array
+    // meetPerms will be false if any of the functions returns false
+    let meetPerms = true;
+    for await (const func of command.perms) {
+        const currentPerm = await func(message);
+        if(!currentPerm) meetPerms = false;
+    }
+
+    
+    // Runs if perms don't match
+    if(!meetPerms) {
+        message.reply(simpleEmbed(`You don't meet the necessary permissions to run this command`, '#ff0000'));
+        return;
+    }
+    // Runs if perms match
+    if(meetPerms) {
+        CommandsMap.get(commandName).execute(message, args);
+        return;
+    }
+
+}
+
 // Runs when a message is sent
 async function messageCreated(message, CommandsMap, prefix) {
     if(!message.content.startsWith(prefix)) return;
@@ -16,7 +41,7 @@ async function messageCreated(message, CommandsMap, prefix) {
         CommandsMap.forEach(async (commandFunction, commandName) => {
             for(const alias of commandFunction.alias) {
                 if(command == alias) {
-                    CommandsMap.get(commandName).execute(message, args);
+                    checkForPermsAndRunsCommand(CommandsMap, commandName, message, args);
                     aliasFound = true;
                     return;
                 }
@@ -30,8 +55,8 @@ async function messageCreated(message, CommandsMap, prefix) {
         return;
     }
 
-    // Runs the command
-    CommandsMap.get(command).execute(message, args);
+    // Runs the command if it was called by it's full name
+    checkForPermsAndRunsCommand(CommandsMap, command, message, args);
 
 }
 
