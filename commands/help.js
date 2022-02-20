@@ -48,6 +48,6 @@ module.exports = {
     name: 'help',
     description: 'Shows this',
     alias: [],
-    perms: '',
+    perms: [],
     execute: command
 }

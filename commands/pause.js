@@ -14,6 +14,6 @@ module.exports = {
     name: 'pause',
     description: 'Pauses current song',
     alias: [],
-    perms: '',
+    perms: [],
     execute: command
 }

@@ -62,6 +62,6 @@ module.exports = {
     name: 'play',
     description: 'Plays a song\nUsage: #play <querry/url>',
     alias: ['p', 'pl'],
-    perms: '',
+    perms: [],
     execute: command
 }

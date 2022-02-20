@@ -27,6 +27,6 @@ module.exports = {
     name: 'skip',
     description: 'Skips the current song',
     alias: ['s'],
-    perms: '',
+    perms: [],
     execute: command
 }

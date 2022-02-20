@@ -26,6 +26,6 @@ module.exports = {
     name: 'nowplaying',
     description: 'Shows the song that the bot is playing',
     alias: ['np'],
-    perms: '',
+    perms: [],
     execute: command
 }

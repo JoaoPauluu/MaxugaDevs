@@ -14,6 +14,6 @@ module.exports = {
     name: 'resume',
     description: 'Resumes the curret song',
     alias: [],
-    perms: '',
+    perms: [],
     execute: command
 }

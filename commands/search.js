@@ -76,6 +76,6 @@ module.exports = {
     name: 'search',
     description: 'Searches for a song\nUsage: #search <querry>',
     alias: ['ss'],
-    perms: '',
+    perms: [],
     execute: command
 }

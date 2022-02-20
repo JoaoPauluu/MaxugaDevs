@@ -31,6 +31,6 @@ module.exports = {
     name: 'queue',
     description: 'Shows the current queue on this guild',
     alias: ['q'],
-    perms: '',
+    perms: [],
     execute: command
 }
