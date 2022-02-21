@@ -1,4 +1,4 @@
-const { simpleEmbed } = require('./embeds');
+const { simpleEmbed, permsEmbed } = require('./embeds');
 
 async function checkForPermsAndRunsCommand(CommandsMap, commandName, message, args) {
     const command = CommandsMap.get(commandName);
@@ -6,15 +6,20 @@ async function checkForPermsAndRunsCommand(CommandsMap, commandName, message, ar
     // Iterate and run all the fuctions inside the perms array
     // meetPerms will be false if any of the functions returns false
     let meetPerms = true;
+    let reasons = [];
     for await (const func of command.perms) {
         const currentPerm = await func(message);
-        if(!currentPerm) meetPerms = false;
+
+        if(!currentPerm[0]) {
+            meetPerms = false;
+            reasons.push(currentPerm[1]);
+        }
     }
 
     
     // Runs if perms don't match
     if(!meetPerms) {
-        message.reply(simpleEmbed(`You don't meet the necessary permissions to run this command`, '#ff0000'));
+        message.reply({ embeds: [permsEmbed(reasons)] });
         return;
     }
     // Runs if perms match

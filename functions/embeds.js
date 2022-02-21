@@ -61,11 +61,24 @@ async function searchEmbed(data) {
     }
 }
 
+function permsEmbed(data) {
+    let description = "**You don't meet the following permissions to run this command:**\n";
+    data.forEach(reason => {
+        description += `🤚 ${reason}\n`;
+    })
+
+    return {
+        color: '#FF0000',
+        description: description
+    }
+}
+
 
 module.exports = {
     simpleEmbed,
     titleEmbed,
     queueEmbed,
-    searchEmbed
+    searchEmbed,
+    permsEmbed
 }
   
