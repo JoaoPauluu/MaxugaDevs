@@ -62,6 +62,7 @@ async function playSong(guildId) {
 
     const queue = await Queue.getQueue(guildId);
 
+    // Runs if the queue exists and playing was set to false (has an empty queue)
     if(!queue.playing) {
         // Checks if the bot was playing something before. If not, cancels the 
         // disconnect timeout and sets playing to true.
@@ -96,6 +97,7 @@ async function handleSong(message, url) {
     let songInfo;
     try {
         songInfo = await Queue.extractInfo(url);
+        songInfo.userId = message.author.id;
     } catch (e) {
         console.log(e);
         message.reply(e.message);
